@@ -1,15 +1,16 @@
 import requests
 import pandas as pd
+import os
 
 
 def create_stock_dataframe(ticker="NONE", size="full"):
     if ticker == "NONE":
         return None
-
+    api = os.environ["vantage_api_key"]
     function = 'function=TIME_SERIES_DAILY'
     symbol = f'symbol={ticker}'
     size = f'outputsize={size}'
-    api_key = 'apikey=C0S1BTKMMN5286JT'
+    api_key = f'apikey={api}'
     url = f'https://www.alphavantage.co/query?&{function}&{symbol}&{size}&{api_key}'
 
     response = requests.get(url)
@@ -37,4 +38,3 @@ class Stock:
     def get_returns(self):
         stock_returns = pd.to_numeric(self.__dataframe['4. close']) - pd.to_numeric(self.__dataframe['1. open'])
         return stock_returns
-
